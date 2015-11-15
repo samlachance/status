@@ -3,6 +3,7 @@ require "open-uri"
 
 class Call
   attr_accessor :status, :agency, :location, :query_status, :query_agency, :query_location
+  
   def initialize  
     @call_data = Nokogiri::HTML(open("http://hamilton911.discoveregov.com/ajax.php?ts=")); nil
     @status = @call_data.css('td')[0].text
@@ -36,13 +37,13 @@ class Call
   end
 end
 
-puts "Welcome to Status."
-puts "Please enter refresh rate (in seconds): "
+puts "Welcome to Status"
+print "Please enter refresh rate (in seconds): "
 refresh_rate = gets
-# Creates object from the Call class
-puts "Fetching current call..."
-call = Call.new
 
+# Creates object from the Call class
+call = Call.new
+puts "Fetching current call..."
 # Prints the current call information that was obtained when the call object was created
 puts call.status
 puts call.agency
