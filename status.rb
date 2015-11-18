@@ -1,5 +1,6 @@
 require "nokogiri"
 require "open-uri"
+require "colorize"
 
 
 class Call
@@ -15,16 +16,37 @@ class Call
     self.location = location
   end
   
-  def print
-    puts status
-    puts agency
-    puts location
+  # Prints the data with color assignments
+  def print(color)
+    puts status.colorize(color)
+    puts agency.colorize(color)
+    puts location.colorize(color)
   end
 
+  # Filters the data and assigns a color based on importance
+  def filter
+    police = ["Police", "Sheriff"]
+    fire = ["Fire"]
+    special = ["CHILD", "SHOTS", "ACC1", "ACC3", "ACC4", "BACKO"]
+    if special.any? { |special| agency.include?(special)}
+      print(:light_yellow)
+    elsif agency.include?("EMS")
+      print(:light_red)
+    elsif police.any? { |police| agency.include?(police)}
+      print(:light_blue)
+    elsif fire.any? { |fire| agency.include?(fire)}
+      print(:red)
+    else
+      print(:white)
+    end
+  end
+
+  # Fetches data from the source server
   def self.fetch
     Nokogiri::HTML(open("http://hamilton911.discoveregov.com/ajax.php?ts="))
   end
   
+  # Parses the data from the source, formats some of the data, creates a new Call object, and then maps the data to variables
   def self.parse
     call_data = fetch
     call_data.css('br').each{ |br| br.replace ", " }
@@ -47,11 +69,11 @@ class Call
 
   def self.listen
     loop do
-      Call.latest.each(&:print)
+      Call.latest.each(&:filter)
       sleep (POLL_TIME.to_i)
     end
   end
 end
 
-puts "Welcome to Status"
+puts "Welcome to Status\n\n"
 Call.listen
