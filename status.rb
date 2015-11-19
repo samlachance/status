@@ -18,6 +18,7 @@ class Call
   
   # Prints the data with color assignments
   def print(color)
+    puts "Fetched at #{Time.now}".colorize(:light_black)
     puts status.colorize(color)
     puts agency.colorize(color)
     puts location.colorize(color)
@@ -27,7 +28,7 @@ class Call
   def filter
     police = ["Police", "Sheriff"]
     fire = ["Fire"]
-    special = ["CHILD", "SHOTS", "ACC1", "ACC3", "ACC4", "BACKO"]
+    special = ["CHILD", "SHOTS", "ACC1", "ACC3", "ACC4", "BACKO", "FRES", "DRUGOD"]
     if special.any? { |special| agency.include?(special)}
       print(:light_yellow)
     elsif agency.include?("EMS")
