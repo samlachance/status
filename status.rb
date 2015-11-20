@@ -31,7 +31,7 @@ class Call
     special = ["CHILD", "SHOTS", "ACC1", "ACC3", "ACC4", "BACKO", "FRES", "DRUGOD"]
     if special.any? { |special| agency.include?(special)}
       print(:light_yellow)
-    elsif agency.include?("EMS")
+    elsif agency.include?("EMS CALL")
       print(:light_red)
     elsif police.any? { |police| agency.include?(police)}
       print(:light_blue)
